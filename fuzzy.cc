@@ -2,21 +2,10 @@
 
 using namespace std;
 
-//TriFuzzyNumSet::TriFuzzyNumSet(const TriFuzzyNumSet &other) {
-//
-//}
-//
-//TriFuzzyNumSet &TriFuzzyNumSet::operator=(const TriFuzzyNumSet &other) {
-//    return ;
-//}
-//
-//TriFuzzyNumSet::TriFuzzyNumSet(const TriFuzzyNumSet &&other) {
-//
-//}
-//
-//TriFuzzyNumSet &TriFuzzyNumSet::operator=(TriFuzzyNumSet &&other) {
-//    return ;
-//}
+TriFuzzyNumSet::~TriFuzzyNumSet() {
+    s.clear();
+}
+
 void TriFuzzyNumSet::insert(const TriFuzzyNum &n) {
     s.insert(n);
 }
@@ -34,9 +23,18 @@ void TriFuzzyNumSet::remove(TriFuzzyNum &&n) {
 }
 
 TriFuzzyNum TriFuzzyNumSet::arithmetic_mean() {
-    real_t l = 0, m = 0, u = 0;
-    for (auto n : s) {
-//        sum += n;
+    if (s.empty()) {
+        throw length_error("TriFuzzyNumSet::arithmetic_mean"
+                           " - the set is empty.");
     }
-    return TriFuzzyNum(l, m, u);
+
+    real_t sum_l = 0, sum_m = 0, sum_u = 0, size = (double) s.size();
+
+    for (auto a : s) {
+        sum_l = a.lower_value();
+        sum_m = a.modal_value();
+        sum_u = a.upper_value();
+    }
+
+    return TriFuzzyNum(sum_l / size, sum_m / size, sum_u / size);
 }

@@ -13,6 +13,8 @@ class TriFuzzyNumSet {
     std::multiset<TriFuzzyNum> s;
 
 public:
+    TriFuzzyNumSet() = default;
+    ~TriFuzzyNumSet();
     TriFuzzyNumSet(const TriFuzzyNumSet &other) = default;
     TriFuzzyNumSet &operator=(const TriFuzzyNumSet &other) = default;
     TriFuzzyNumSet(TriFuzzyNumSet &&other) = default;
