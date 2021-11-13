@@ -15,6 +15,7 @@ class TriFuzzyNum {
 
     const std::tuple<real_t, real_t, real_t> getRank() const;
 
+    void sortComponents();
 public:
     constexpr TriFuzzyNum(real_t low, real_t mod, real_t up) {
         if (up < low) std::swap(low, up);

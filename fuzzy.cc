@@ -1,7 +1,11 @@
 #include "fuzzy.h"
 #include <cmath>
 
-using namespace std;
+void TriFuzzyNum::sortComponents() {
+    if (u < l) std::swap(l, u);
+    if (m < l) std::swap(l, m);
+    if (u < m) std::swap(m, u);
+}
 
 TriFuzzyNum& TriFuzzyNum::operator+=(const TriFuzzyNum &rhs) {
     l += rhs.l;
@@ -21,9 +25,7 @@ TriFuzzyNum& TriFuzzyNum::operator*=(const TriFuzzyNum &rhs) {
     l *= rhs.l;
     m *= rhs.m;
     u *= rhs.u;
-    if (u < l) std::swap(l, u);
-    if (m < l) std::swap(l, m);
-    if (u < m) std::swap(m, u);
+    sortComponents();
     return *this;
 }
 
@@ -39,16 +41,16 @@ const TriFuzzyNum TriFuzzyNum::operator*(const TriFuzzyNum &rhs) const {
     return TriFuzzyNum(*this) *= rhs;
 }
 
-const tuple<real_t, real_t, real_t> TriFuzzyNum::getRank() const {
+const std::tuple<real_t, real_t, real_t> TriFuzzyNum::getRank() const {
     real_t z = (u - l) + sqrt(1 + (u - m) * (u - m)) +
             sqrt(1 + (m - l) * (m - l));
     real_t y = (u - l) / z;
     real_t x = ((u - l) * m + sqrt(1 + (u - m) * (u - m)) * l +
             sqrt(1 + (m - l) * (m - l)) * u) / z;
-    return make_tuple((x-y)/2, 1-y, m);
+    return std::make_tuple(x-y/2, 1-y, m);
 }
 
-const partial_ordering TriFuzzyNum::operator<=>(const TriFuzzyNum &rhs) const {
+const std::partial_ordering TriFuzzyNum::operator<=>(const TriFuzzyNum &rhs) const {
     auto rank1 = getRank();
     auto rank2 = rhs.getRank();
 
@@ -63,7 +65,7 @@ const partial_ordering TriFuzzyNum::operator<=>(const TriFuzzyNum &rhs) const {
         return get<2>(rank1) <=> get<2>(rank2);
 }
 
-ostream& operator<<(std::ostream& os, const TriFuzzyNum& n) {
+std::ostream& operator<<(std::ostream& os, const TriFuzzyNum& n) {
     return os << "(" << n.l << ", " << n.m << ", " << n.u << ")";
 }
 
@@ -89,7 +91,7 @@ void TriFuzzyNumSet::remove(TriFuzzyNum &&n) {
 
 TriFuzzyNum TriFuzzyNumSet::arithmetic_mean() {
     if (s.empty()) {
-        throw length_error("TriFuzzyNumSet::arithmetic_mean"
+        throw std::length_error("TriFuzzyNumSet::arithmetic_mean"
                            " - the set is empty.");
     }
 
