@@ -1,3 +1,5 @@
+// autorzy: Mateusz Malinowski (mm429561), Maciej Mućka (mm429572)
+
 #ifndef FUZZY_H
 #define FUZZY_H
 
@@ -13,17 +15,28 @@ class TriFuzzyNum {
     real_t m;
     real_t u;
 
+    /**
+     * Oblicza i zwraca rangę liczby rozmytej.
+     *
+     * Ranga jest krotką używaną do porównywania obiektów. Poszczególne rangi
+     * należy porównywać leksykograficznie.
+     */
     const std::tuple<real_t, real_t, real_t> getRank() const;
 
-    void sortComponents();
+    /**
+     * Sortuj elementy obiektu TriFuzzyNum.
+     *
+     * Służy do przywracania porządku po operacjach, które mogą go zaburzyć.
+     */
+    constexpr void sortComponents() {
+        if (u < l) std::swap(l, u);
+        if (m < l) std::swap(l, m);
+        if (u < m) std::swap(m, u);
+    };
+
 public:
-    constexpr TriFuzzyNum(real_t low, real_t mod, real_t up) {
-        if (up < low) std::swap(low, up);
-        if (mod < low) std::swap(low, mod);
-        if (up < mod) std::swap(mod, up);
-        l = low;
-        m = mod;
-        u = up;
+    constexpr TriFuzzyNum(real_t low, real_t mod, real_t up) : l(low), m(mod), u(up) {
+        sortComponents();
     }
     constexpr TriFuzzyNum(const TriFuzzyNum &other) = default;
     constexpr TriFuzzyNum(TriFuzzyNum &&other) = default;
@@ -62,16 +75,18 @@ class TriFuzzyNumSet {
 public:
     TriFuzzyNumSet() = default;
     TriFuzzyNumSet(std::initializer_list<TriFuzzyNum> l) : s(l) {};
-    ~TriFuzzyNumSet();
     TriFuzzyNumSet(const TriFuzzyNumSet &other) = default;
     TriFuzzyNumSet &operator=(const TriFuzzyNumSet &other) = default;
     TriFuzzyNumSet(TriFuzzyNumSet &&other) = default;
     TriFuzzyNumSet &operator=(TriFuzzyNumSet &&other) = default;
+
     void insert(const TriFuzzyNum &n);
     void insert(TriFuzzyNum &&n);
+
     void remove(const TriFuzzyNum &n);
     void remove(TriFuzzyNum &&n);
-    TriFuzzyNum arithmetic_mean();
+
+    const TriFuzzyNum arithmetic_mean() const;
 };
 
 consteval TriFuzzyNum crisp_number(real_t v) {

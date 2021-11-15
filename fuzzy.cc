@@ -1,11 +1,7 @@
+// autorzy: Mateusz Malinowski (mm429561), Maciej Mućka (mm429572)
+
 #include "fuzzy.h"
 #include <cmath>
-
-void TriFuzzyNum::sortComponents() {
-    if (u < l) std::swap(l, u);
-    if (m < l) std::swap(l, m);
-    if (u < m) std::swap(m, u);
-}
 
 TriFuzzyNum& TriFuzzyNum::operator+=(const TriFuzzyNum &rhs) {
     l += rhs.l;
@@ -69,10 +65,6 @@ std::ostream& operator<<(std::ostream& os, const TriFuzzyNum& n) {
     return os << "(" << n.l << ", " << n.m << ", " << n.u << ")";
 }
 
-TriFuzzyNumSet::~TriFuzzyNumSet() {
-    s.clear();
-}
-
 void TriFuzzyNumSet::insert(const TriFuzzyNum &n) {
     s.insert(n);
 }
@@ -89,13 +81,13 @@ void TriFuzzyNumSet::remove(TriFuzzyNum &&n) {
     s.erase(n);
 }
 
-TriFuzzyNum TriFuzzyNumSet::arithmetic_mean() {
+const TriFuzzyNum TriFuzzyNumSet::arithmetic_mean() const {
     if (s.empty()) {
         throw std::length_error("TriFuzzyNumSet::arithmetic_mean"
                            " - the set is empty.");
     }
 
-    real_t sum_l = 0, sum_m = 0, sum_u = 0, size = (double) s.size();
+    real_t sum_l = 0, sum_m = 0, sum_u = 0, size = static_cast<real_t>(s.size());
 
     for (auto a : s) {
         sum_l += a.lower_value();
