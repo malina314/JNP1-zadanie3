@@ -47,18 +47,8 @@ const std::tuple<real_t, real_t, real_t> TriFuzzyNum::getRank() const {
 }
 
 const std::partial_ordering TriFuzzyNum::operator<=>(const TriFuzzyNum &rhs) const {
-    auto rank1 = getRank();
-    auto rank2 = rhs.getRank();
-
-    auto comp1 = get<0>(rank1) <=> get<0>(rank2);
-    if (comp1 != 0)
-        return comp1;
-
-    auto comp2 = get<1>(rank1) <=> get<1>(rank2);
-    if (comp2 != 0)
-        return comp2;
-    else
-        return get<2>(rank1) <=> get<2>(rank2);
+    // Domyślny operator <=> porównuje krotki leksykograficznie.
+    return getRank() <=> rhs.getRank();
 }
 
 std::ostream& operator<<(std::ostream& os, const TriFuzzyNum& n) {
