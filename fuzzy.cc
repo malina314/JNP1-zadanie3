@@ -3,21 +3,21 @@
 #include "fuzzy.h"
 #include <cmath>
 
-TriFuzzyNum& TriFuzzyNum::operator+=(const TriFuzzyNum &rhs) {
+TriFuzzyNum& TriFuzzyNum::operator+=(const TriFuzzyNum& rhs) {
     l += rhs.l;
     m += rhs.m;
     u += rhs.u;
     return *this;
 }
 
-TriFuzzyNum& TriFuzzyNum::operator-=(const TriFuzzyNum &rhs) {
+TriFuzzyNum& TriFuzzyNum::operator-=(const TriFuzzyNum& rhs) {
     l -= rhs.u;
     m -= rhs.m;
     u -= rhs.l;
     return *this;
 }
 
-TriFuzzyNum& TriFuzzyNum::operator*=(const TriFuzzyNum &rhs) {
+TriFuzzyNum& TriFuzzyNum::operator*=(const TriFuzzyNum& rhs) {
     l *= rhs.l;
     m *= rhs.m;
     u *= rhs.u;
@@ -25,15 +25,15 @@ TriFuzzyNum& TriFuzzyNum::operator*=(const TriFuzzyNum &rhs) {
     return *this;
 }
 
-const TriFuzzyNum TriFuzzyNum::operator+(const TriFuzzyNum &rhs) const {
+const TriFuzzyNum TriFuzzyNum::operator+(const TriFuzzyNum& rhs) const {
     return TriFuzzyNum(*this) += rhs;
 }
 
-const TriFuzzyNum TriFuzzyNum::operator-(const TriFuzzyNum &rhs) const {
+const TriFuzzyNum TriFuzzyNum::operator-(const TriFuzzyNum& rhs) const {
     return TriFuzzyNum(*this) -= rhs;
 }
 
-const TriFuzzyNum TriFuzzyNum::operator*(const TriFuzzyNum &rhs) const {
+const TriFuzzyNum TriFuzzyNum::operator*(const TriFuzzyNum& rhs) const {
     return TriFuzzyNum(*this) *= rhs;
 }
 
@@ -43,11 +43,12 @@ const std::tuple<real_t, real_t, real_t> TriFuzzyNum::getRank() const {
     real_t y = (u - l) / z;
     real_t x = ((u - l) * m + sqrt(1 + (u - m) * (u - m)) * l +
             sqrt(1 + (m - l) * (m - l)) * u) / z;
-    return std::make_tuple(x-y/2, 1-y, m);
+
+    return std::make_tuple(x - y / 2, 1 - y, m);
 }
 
-const std::partial_ordering TriFuzzyNum::operator<=>(const TriFuzzyNum &rhs) const {
-    // Domyślny operator <=> porównuje krotki leksykograficznie.
+const std::partial_ordering TriFuzzyNum::operator<=>(const TriFuzzyNum& rhs) const {
+    // Domyślny operator<=> porównuje krotki leksykograficznie.
     return getRank() <=> rhs.getRank();
 }
 
@@ -55,19 +56,15 @@ std::ostream& operator<<(std::ostream& os, const TriFuzzyNum& n) {
     return os << "(" << n.l << ", " << n.m << ", " << n.u << ")";
 }
 
-void TriFuzzyNumSet::insert(const TriFuzzyNum &n) {
+void TriFuzzyNumSet::insert(const TriFuzzyNum& n) {
     s.insert(n);
 }
 
-void TriFuzzyNumSet::insert(TriFuzzyNum &&n) {
+void TriFuzzyNumSet::insert(TriFuzzyNum&& n) {
     s.insert(n);
 }
 
-void TriFuzzyNumSet::remove(const TriFuzzyNum &n) {
-    s.erase(n);
-}
-
-void TriFuzzyNumSet::remove(TriFuzzyNum &&n) {
+void TriFuzzyNumSet::remove(const TriFuzzyNum& n) {
     s.erase(n);
 }
 
@@ -77,7 +74,8 @@ const TriFuzzyNum TriFuzzyNumSet::arithmetic_mean() const {
                            " - the set is empty.");
     }
 
-    real_t sum_l = 0, sum_m = 0, sum_u = 0, size = static_cast<real_t>(s.size());
+    real_t sum_l = 0, sum_m = 0, sum_u = 0,
+        size = static_cast<real_t>(s.size());
 
     for (auto a : s) {
         sum_l += a.lower_value();

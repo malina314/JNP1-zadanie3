@@ -16,7 +16,7 @@ class TriFuzzyNum {
     real_t u;
 
     /**
-     * Oblicza i zwraca rangę liczby rozmytej.
+     * Oblicz i zwróć rangę liczby rozmytej.
      *
      * Ranga jest krotką używaną do porównywania obiektów. Poszczególne rangi
      * należy porównywać leksykograficznie.
@@ -38,6 +38,7 @@ public:
     constexpr TriFuzzyNum(real_t low, real_t mod, real_t up) : l(low), m(mod), u(up) {
         sortComponents();
     }
+
     constexpr TriFuzzyNum(const TriFuzzyNum &other) = default;
     constexpr TriFuzzyNum(TriFuzzyNum &&other) = default;
 
@@ -45,24 +46,24 @@ public:
     constexpr real_t modal_value() const { return m; }
     constexpr real_t upper_value() const { return u; }
 
-    TriFuzzyNum &operator=(const TriFuzzyNum &other) = default;
-    TriFuzzyNum &operator=(TriFuzzyNum &&other) = default;
+    TriFuzzyNum& operator=(const TriFuzzyNum& other) = default;
+    TriFuzzyNum& operator=(TriFuzzyNum&& other) = default;
 
-    TriFuzzyNum& operator+=(const TriFuzzyNum &rhs);
-    TriFuzzyNum& operator-=(const TriFuzzyNum &rhs);
-    TriFuzzyNum& operator*=(const TriFuzzyNum &rhs);
+    TriFuzzyNum& operator+=(const TriFuzzyNum& rhs);
+    TriFuzzyNum& operator-=(const TriFuzzyNum& rhs);
+    TriFuzzyNum& operator*=(const TriFuzzyNum& rhs);
 
-    const TriFuzzyNum operator+(const TriFuzzyNum &rhs) const;
-    const TriFuzzyNum operator-(const TriFuzzyNum &rhs) const;
-    const TriFuzzyNum operator*(const TriFuzzyNum &rhs) const;
+    const TriFuzzyNum operator+(const TriFuzzyNum& rhs) const;
+    const TriFuzzyNum operator-(const TriFuzzyNum& rhs) const;
+    const TriFuzzyNum operator*(const TriFuzzyNum& rhs) const;
 
-    const std::partial_ordering operator<=>(const TriFuzzyNum &rhs) const;
+    const std::partial_ordering operator<=>(const TriFuzzyNum& rhs) const;
 
-    constexpr bool operator==(const TriFuzzyNum &rhs) const {
+    constexpr bool operator==(const TriFuzzyNum& rhs) const {
         return (l == rhs.l) && (m == rhs.m) && (u == rhs.u);
     }
 
-    constexpr bool operator!=(const TriFuzzyNum &rhs) const {
+    constexpr bool operator!=(const TriFuzzyNum& rhs) const {
         return !(*this == rhs);
     }
 
@@ -75,17 +76,28 @@ class TriFuzzyNumSet {
 public:
     TriFuzzyNumSet() = default;
     TriFuzzyNumSet(std::initializer_list<TriFuzzyNum> l) : s(l) {};
-    TriFuzzyNumSet(const TriFuzzyNumSet &other) = default;
-    TriFuzzyNumSet &operator=(const TriFuzzyNumSet &other) = default;
-    TriFuzzyNumSet(TriFuzzyNumSet &&other) = default;
-    TriFuzzyNumSet &operator=(TriFuzzyNumSet &&other) = default;
+    TriFuzzyNumSet(const TriFuzzyNumSet& other) = default;
+    TriFuzzyNumSet &operator=(const TriFuzzyNumSet& other) = default;
+    TriFuzzyNumSet(TriFuzzyNumSet&& other) = default;
+    TriFuzzyNumSet &operator=(TriFuzzyNumSet&& other) = default;
 
-    void insert(const TriFuzzyNum &n);
-    void insert(TriFuzzyNum &&n);
+    /**
+     * Wstaw daną liczbę do zbioru.
+     */
+    void insert(const TriFuzzyNum& n);
+    void insert(TriFuzzyNum&& n);
 
-    void remove(const TriFuzzyNum &n);
-    void remove(TriFuzzyNum &&n);
+    /**
+     * Usuń daną liczbę ze zbioru.
+     *
+     * Usuwa wszystkie wystąpienia danej liczby. Nie można swobodnie
+     * zamieniać ze sobą operacji insert i remove.
+     */
+    void remove(const TriFuzzyNum& n);
 
+    /**
+     * Oblicz i zwróć średnią arytmetyczną elementów zbioru.
+     */
     const TriFuzzyNum arithmetic_mean() const;
 };
 
