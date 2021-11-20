@@ -56,17 +56,11 @@ std::ostream& operator<<(std::ostream& os, const TriFuzzyNum& n) {
     return os << "(" << n.l << ", " << n.m << ", " << n.u << ")";
 }
 
-void TriFuzzyNumSet::insert(const TriFuzzyNum& n) {
-    s.insert(n);
-}
+void TriFuzzyNumSet::insert(const TriFuzzyNum& n) { s.insert(n); }
 
-void TriFuzzyNumSet::insert(TriFuzzyNum&& n) {
-    s.insert(n);
-}
+void TriFuzzyNumSet::insert(TriFuzzyNum&& n) { s.insert(n); }
 
-void TriFuzzyNumSet::remove(const TriFuzzyNum& n) {
-    s.erase(n);
-}
+void TriFuzzyNumSet::remove(const TriFuzzyNum& n) { s.erase(n); }
 
 const TriFuzzyNum TriFuzzyNumSet::arithmetic_mean() const {
     if (s.empty()) {

@@ -39,8 +39,8 @@ public:
         sortComponents();
     }
 
-    constexpr TriFuzzyNum(const TriFuzzyNum &other) = default;
-    constexpr TriFuzzyNum(TriFuzzyNum &&other) = default;
+    constexpr TriFuzzyNum(const TriFuzzyNum& other) = default;
+    constexpr TriFuzzyNum(TriFuzzyNum&& other) = default;
 
     constexpr real_t lower_value() const { return l; }
     constexpr real_t modal_value() const { return m; }
@@ -77,9 +77,9 @@ public:
     TriFuzzyNumSet() = default;
     TriFuzzyNumSet(std::initializer_list<TriFuzzyNum> l) : s(l) {};
     TriFuzzyNumSet(const TriFuzzyNumSet& other) = default;
-    TriFuzzyNumSet &operator=(const TriFuzzyNumSet& other) = default;
+    TriFuzzyNumSet& operator=(const TriFuzzyNumSet& other) = default;
     TriFuzzyNumSet(TriFuzzyNumSet&& other) = default;
-    TriFuzzyNumSet &operator=(TriFuzzyNumSet&& other) = default;
+    TriFuzzyNumSet& operator=(TriFuzzyNumSet&& other) = default;
 
     /**
      * Wstaw daną liczbę do zbioru.
@@ -101,10 +101,10 @@ public:
     const TriFuzzyNum arithmetic_mean() const;
 };
 
-consteval TriFuzzyNum crisp_number(real_t v) {
+consteval static TriFuzzyNum crisp_number(real_t v) {
     return TriFuzzyNum(v, v, v);
 }
 
-constinit const TriFuzzyNum crisp_zero = crisp_number(0);
+constinit inline const TriFuzzyNum crisp_zero = crisp_number(0);
 
 #endif //FUZZY_H
